@@ -1,0 +1,99 @@
+# 服务配置
+server:
+ # 服务端口
+  port: 8066
+  error:
+    path: /error
+  tomcat:
+    max-threads: 1000
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/forever
+    username: postgres
+    password: postgres
+
+# aop切面配置
+aop: 
+  controller: 
+    payServerStartTime: 8                # 支付服务开启时间
+    payServerStopTime:  0                # 支付服务关闭时间
+
+# 互助交易使用配置
+trade:
+  emailCode: false
+  staticCode: false
+  smsCode: false
+  smsTimeOut: 60
+  passwordSign: true
+  auroraSignKey: aadeewqDerqqwWW0001
+  withdrawalNoticeFlag: false                       # 出金通知标识
+  withdrawalNoticeMobile: 18565676741               # 出金通知手机号,多个用逗号隔开
+  withdrawalNoticeEmail: 18565676741@qeveworld.com  # 出金通知邮箱
+  downlineTradeNoticeFlag: 0                        # 0:手机 1:邮箱 2:手机及邮箱
+
+#验证码启用状态
+captcha:
+  mail:                  #邮件验证状态
+    login: false         #登录
+    register: true       #注册
+    changePwd: true      #修改密码
+    changeSecPwd: true   #修改支付密码
+  comm:                  #普通验证码
+    login: false         #登录
+    register: true       #注册
+    changePwd: true      #修改密码
+    changeSecPwd: true   #修改支付密码
+
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:             #缩略图生成参数
+    width: 150
+    height: 150
+  trackerList:            #TrackerList参数,支持多个
+    - 192.168.2.78:22122 
+  pool:
+    #从池中借出的对象的最大数目
+    maxTotal: 153
+    #获取连接时的最大等待毫秒数100
+    maxWaitMillis: 102
+    
+#互助平台自定义配置 begin
+hzconf:
+  phpMailServerAddr : http://api.qeveworld.biz/api/mail/thirdparysendmail
+  dfsFileAccessPrefix : http://192.168.2.78:9998/  #存放在fastdfs的文件访问 URL 前缀 如：protocol://host:port
+  userDefaultPwd : h8888m8888  #后台用户默认密码 
+  tradeSystemDomain : http://hermest.com    #互助平台地址 作为短信 用
+  mailAppId : 0be987167bba4b80b2b68889378e5140
+  mailSecretkey : c035c839e00e706b1bb9c0209e9ee8f6
+  #访问计数例外uri
+  excludeCountURIs: /api/user/safe/*.+,/api/safe/*.+
+  #单个session回话可执行绑定操作的次数
+  bindMakeysCountMax: 5
+  
+#用户中心接口    
+usercenterapi:
+  #用户中心标记的本系统的id
+  systemid: 1004
+  #安全中心系统id
+  safesystemId: 2000
+  #ip或域名 带端口
+  host: 110.79.11.5:80/user-safe-api
+  #协议
+  protocol: http
+  #密码登录验证接口
+  apiloginpass: /user/loginByUserPass
+  #二维码登录接口
+  apigetqrcode: /safe/getQRCode
+  #检查账号是否绑定手机
+  apicheckMobile: /user/checkMobile
+  #执行绑定手机号
+  apiboundMobile: /user/boundMobile
+  #验证动态码
+  apiVerifycode: /totp/verifyPasscodeByUsername
+  #获取用户实名信息接口
+  apiGetAuthInfo: /userinfo/getCertifiedInfo
+  #makeys logo image path
+  makeysLogoPath: C:\\Users\\DELL\\Desktop\\imgs\\makeys.png

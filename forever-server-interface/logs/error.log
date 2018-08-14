@@ -1,0 +1,1 @@
+2018-05-11 16:09:20 [ERROR][org.springframework.data.redis.listener.RedisMessageListenerContainer][handleSubscriptionException][647]-> Connection failure occurred. Restarting subscription task after 5000 ms

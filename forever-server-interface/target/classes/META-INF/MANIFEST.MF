@@ -1,0 +1,73 @@
+Manifest-Version: 1.0
+Implementation-Title: forever-server-interface
+Implementation-Version: 1.0-SNAPSHOT
+Built-By: Administrator
+Implementation-Vendor-Id: com.gaoan.forever
+Class-Path: ./ lib/spring-session-data-redis-1.2.2.RELEASE.jar lib/com
+ mons-pool2-2.4.2.jar lib/spring-data-redis-1.7.6.RELEASE.jar lib/spri
+ ng-data-keyvalue-1.1.6.RELEASE.jar lib/spring-data-commons-1.12.6.REL
+ EASE.jar lib/spring-tx-4.3.5.RELEASE.jar lib/spring-oxm-4.3.5.RELEASE
+ .jar lib/spring-context-support-4.3.5.RELEASE.jar lib/spring-session-
+ 1.2.2.RELEASE.jar lib/jedis-2.8.2.jar lib/forever-server-core-1.0-SNA
+ PSHOT.jar lib/forever-server-common-1.0-SNAPSHOT.jar lib/spring-boot-
+ starter-jdbc-1.4.3.RELEASE.jar lib/tomcat-jdbc-8.5.6.jar lib/tomcat-j
+ uli-8.5.6.jar lib/spring-jdbc-4.3.5.RELEASE.jar lib/mybatis-3.2.8.jar
+  lib/mybatis-spring-1.2.3.jar lib/mapper-spring-boot-starter-1.1.1.ja
+ r lib/mybatis-spring-boot-starter-1.2.0.jar lib/mybatis-spring-boot-a
+ utoconfigure-1.2.0.jar lib/mapper-spring-boot-autoconfigure-1.1.1.jar
+  lib/mapper-3.4.0.jar lib/persistence-api-1.0.jar lib/spring-boot-sta
+ rter-mail-1.4.3.RELEASE.jar lib/javax.mail-1.5.6.jar lib/activation-1
+ .1.jar lib/pagehelper-4.2.1.jar lib/jsqlparser-0.9.5.jar lib/mysql-co
+ nnector-java-5.1.40.jar lib/postgresql-9.4.1212.jre7.jar lib/druid-1.
+ 0.18.jar lib/thymeleaf-extras-shiro-1.2.1.jar lib/nekohtml-1.9.22.jar
+  lib/xercesImpl-2.11.0.jar lib/spring-boot-starter-web-1.4.3.RELEASE.
+ jar lib/spring-boot-starter-1.4.3.RELEASE.jar lib/spring-boot-1.4.3.R
+ ELEASE.jar lib/spring-boot-starter-logging-1.4.3.RELEASE.jar lib/jul-
+ to-slf4j-1.7.24.jar lib/log4j-over-slf4j-1.7.24.jar lib/snakeyaml-1.1
+ 7.jar lib/spring-boot-starter-tomcat-1.4.3.RELEASE.jar lib/tomcat-emb
+ ed-core-8.5.6.jar lib/tomcat-embed-el-8.5.6.jar lib/tomcat-embed-webs
+ ocket-8.5.6.jar lib/hibernate-validator-5.2.4.Final.jar lib/validatio
+ n-api-1.1.0.Final.jar lib/jboss-logging-3.3.0.Final.jar lib/jackson-d
+ atabind-2.5.4.jar lib/jackson-annotations-2.5.4.jar lib/jackson-core-
+ 2.5.4.jar lib/spring-web-4.3.5.RELEASE.jar lib/spring-beans-4.3.5.REL
+ EASE.jar lib/spring-webmvc-4.3.5.RELEASE.jar lib/spring-expression-4.
+ 3.5.RELEASE.jar lib/spring-boot-starter-aop-1.4.3.RELEASE.jar lib/spr
+ ing-aop-4.3.5.RELEASE.jar lib/aspectjweaver-1.8.9.jar lib/spring-core
+ -4.3.5.RELEASE.jar lib/spring-boot-starter-redis-1.4.3.RELEASE.jar li
+ b/fastjson-1.2.11.jar lib/rocketmq-client-3.2.6.jar lib/rocketmq-comm
+ on-3.2.6.jar lib/rocketmq-remoting-3.2.6.jar lib/netty-all-4.0.25.Fin
+ al.jar lib/jyaml-1.3.jar lib/httpclient-4.5.1.jar lib/httpcore-4.4.5.
+ jar lib/commons-codec-1.10.jar lib/commons-lang3-3.1.jar lib/commons-
+ httpclient-3.1.jar lib/commons-logging-1.0.4.jar lib/commons-fileuplo
+ ad-1.3.1.jar lib/commons-io-2.4.jar lib/commons-beanutils-1.9.2.jar l
+ ib/commons-collections-3.2.2.jar lib/xstream-1.4.7.jar lib/xmlpull-1.
+ 1.3.1.jar lib/xpp3_min-1.1.4c.jar lib/jdom-1.1.3.jar lib/springfox-sw
+ agger2-2.6.1.jar lib/swagger-annotations-1.5.10.jar lib/swagger-model
+ s-1.5.10.jar lib/springfox-spi-2.6.1.jar lib/springfox-core-2.6.1.jar
+  lib/springfox-schema-2.6.1.jar lib/springfox-swagger-common-2.6.1.ja
+ r lib/springfox-spring-web-2.6.1.jar lib/guava-18.0.jar lib/classmate
+ -1.3.3.jar lib/spring-plugin-core-1.2.0.RELEASE.jar lib/spring-plugin
+ -metadata-1.2.0.RELEASE.jar lib/mapstruct-1.0.0.Final.jar lib/springf
+ ox-swagger-ui-2.6.1.jar lib/slf4j-api-1.7.24.jar lib/logback-classic-
+ 1.1.2.jar lib/logback-core-1.1.2.jar lib/shiro-core-1.3.2.jar lib/shi
+ ro-web-1.3.2.jar lib/shiro-spring-1.3.2.jar lib/shiro-ehcache-1.3.2.j
+ ar lib/ehcache-core-2.5.3.jar lib/shiro-redis-2.4.2.1-RELEASE.jar lib
+ /patchca-0.5.0.jar lib/jsch-0.1.53.jar lib/jackson-core-asl-1.9.13.ja
+ r lib/jackson-mapper-asl-1.9.13.jar lib/fastdfs-client-1.25.2-RELEASE
+ .jar lib/jcl-over-slf4j-1.7.24.jar lib/spring-boot-autoconfigure-1.4.
+ 3.RELEASE.jar lib/mockito-all-1.9.5.jar lib/spring-context-4.3.5.RELE
+ ASE.jar lib/thumbnailator-0.4.8.jar lib/core-3.0.0.jar lib/javase-3.0
+ .0.jar lib/yunpian-java-sdk-1.2.4.jar lib/gson-2.7.jar lib/httpasyncc
+ lient-4.1.2.jar lib/httpcore-nio-4.4.5.jar lib/httpasyncclient-cache-
+ 4.1.2.jar lib/httpclient-cache-4.5.2.jar lib/UserAgentUtils-1.20.jar 
+ lib/poi-3.16.jar lib/commons-collections4-4.1.jar lib/poi-ooxml-3.16.
+ jar lib/poi-ooxml-schemas-3.16.jar lib/xmlbeans-2.6.0.jar lib/stax-ap
+ i-1.0.1.jar lib/curvesapi-1.04.jar lib/dom4j-1.6.1.jar lib/xml-apis-1
+ .4.01.jar
+Build-Jdk: 1.8.0_131
+Implementation-URL: http://projects.spring.io/spring-boot/forever-serv
+ er/forever-server-interface/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+Main-Class: com.gaoan.forever.APIServerApplication
+
