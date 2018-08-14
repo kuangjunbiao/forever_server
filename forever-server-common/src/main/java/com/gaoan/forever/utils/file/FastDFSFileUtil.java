@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gaoan.forever.base.AppException;
-import com.gaoan.forever.config.HZCustomConfig;
+import com.gaoan.forever.config.ForeverConfig;
 import com.gaoan.forever.constant.MessageInfoConstant;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -37,7 +37,7 @@ public class FastDFSFileUtil {
 	private FastFileStorageClient fastFileStorageClient;
 
 	@Autowired
-	private HZCustomConfig hzCustomConfig;
+	private ForeverConfig hzCustomConfig;
 
 	private static FastDFSFileUtil self;
 
@@ -191,7 +191,8 @@ public class FastDFSFileUtil {
 
 	// 封装文件/图片完整URL地址
 	public static String getResAccessUrl(StorePath storePath) {
-		String fileUrl = self.hzCustomConfig.getDfsFileAccessPrefix() + "/" + storePath.getFullPath();
-		return fileUrl;
+		// String fileUrl = self.hzCustomConfig.getDfsFileAccessPrefix() + "/" +
+		// storePath.getFullPath();
+		return "";
 	}
 }

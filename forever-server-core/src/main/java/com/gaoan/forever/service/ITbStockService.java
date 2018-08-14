@@ -1,7 +1,10 @@
 package com.gaoan.forever.service;
 
+import java.util.List;
+
 import com.gaoan.forever.base.IBaseService;
 import com.gaoan.forever.entity.TbStockEntity;
+import com.gaoan.forever.model.query.OrderQueryConditionModel;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -10,10 +13,10 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ITbStockService extends IBaseService<TbStockEntity> {
 
-    public PageInfo<TbStockEntity> getStockPageInfo(TbStockEntity queryEntity, int page, int pageSize);
+	public PageInfo<TbStockEntity> getStockPageInfo(OrderQueryConditionModel conditionModel, int page, int pageSize);
 
-    public PageInfo<String> queryPurchaseNameList(int page, int pageSize);
+	public List<String> queryPurchaseNameList();
 
-    public PageInfo<String> queryGoodsList(String purchaseOrderName, int page, int pageSize);
+	public List<String> queryGoodsList(String purchaseOrderName);
 
 }

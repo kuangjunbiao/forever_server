@@ -17,37 +17,37 @@ import com.gaoan.forever.constant.LanguageConstant;
  */
 @Component
 public class LanguageUtil {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(LanguageUtil.class);
 
-    private static MessageSource messageSource;
+	private static MessageSource messageSource;
 
-    @Autowired
-    public void setRedisTemplate(MessageSource messageSource) {
-        LanguageUtil.messageSource = messageSource;
-    }
+	@Autowired
+	public void setRedisTemplate(MessageSource messageSource) {
+		LanguageUtil.messageSource = messageSource;
+	}
 
-    public static String getMsg(LanguageConstant languageConstant) {
-    	String value;
-    	try{
-	        Locale locale = LocaleContextHolder.getLocale();
-	        value = messageSource.getMessage(languageConstant.getCode(), null, locale);
-    	}catch(NoSuchMessageException ns){
-    		value = languageConstant.getMsgZh();
-    		logger.error(ns.getMessage());
-    	}
-        return value;
-    }
-    
-    public static String getMsg(LanguageConstant languageConstant,Object... params) {
-    	String value;
-    	try{
-	        Locale locale = LocaleContextHolder.getLocale();
-	        value = messageSource.getMessage(languageConstant.getCode(), null, locale);
-    	}catch(NoSuchMessageException ns){
-    		value = languageConstant.getMsgZh();
-    		logger.error(ns.getMessage());
-    	}
-       return String.format(value,params);
-    }
+	public static String getMsg(LanguageConstant languageConstant) {
+		String value;
+		try {
+			Locale locale = LocaleContextHolder.getLocale();
+			value = messageSource.getMessage(languageConstant.getCode(), null, locale);
+		} catch (NoSuchMessageException ns) {
+			value = languageConstant.getMsgZh();
+			logger.error(ns.getMessage());
+		}
+		return value;
+	}
+
+	public static String getMsg(LanguageConstant languageConstant, Object... params) {
+		String value;
+		try {
+			Locale locale = LocaleContextHolder.getLocale();
+			value = messageSource.getMessage(languageConstant.getCode(), null, locale);
+		} catch (NoSuchMessageException ns) {
+			value = languageConstant.getMsgZh();
+			logger.error(ns.getMessage());
+		}
+		return String.format(value, params);
+	}
 }

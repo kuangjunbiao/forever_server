@@ -13,17 +13,21 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ITbUserService extends IBaseService<TbUserEntity> {
 
-    public void registerUser(String userName, String password, String realName);
+	public void insertUser(Map<String, String> map);
 
-    public void login(String userName, String password);
+	public void login(String userName, String password);
 
-    public List<Map<String, Object>> queryUserResources(String userName);
+	public List<Map<String, Object>> queryUserResources(String userName);
 
-    public Map<String, Object> queryUserDetail(Long userId);
+	public Map<String, Object> queryUserDetail(Long userId);
 
-    public PageInfo<TbUserEntity> getUserPageInfo(int page, int pageSize);
+	public PageInfo<Map<String, Object>> getUserPageInfo(int page, int pageSize);
 
-    public void updateUserInfo(Map<String, Object> map);
+	public void updateUserInfo(Map<String, Object> map);
 
-    public void delUserInfo(Long userId);
+	public void resetPass(Long userId);
+
+	public void forgetPass(Map<String, String> map);
+
+	public void delUserInfo(Long userId);
 }

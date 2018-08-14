@@ -4,6 +4,7 @@ import com.gaoan.forever.base.IBaseService;
 import com.gaoan.forever.entity.TbSalesOrderEntity;
 import com.gaoan.forever.model.query.OrderQueryConditionModel;
 import com.gaoan.forever.model.result.SalesOrderInfoModel;
+import com.gaoan.forever.model.result.StatisticsInfoModel;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -12,11 +13,15 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ITbSalesOrderService extends IBaseService<TbSalesOrderEntity> {
 
-    public PageInfo<SalesOrderInfoModel> querySalesOrder(OrderQueryConditionModel condition, int page, int pageSize);
+	PageInfo<SalesOrderInfoModel> querySalesOrder(OrderQueryConditionModel condition, int page, int pageSize);
 
-    public void insertSalesOrder(SalesOrderInfoModel order);
+	SalesOrderInfoModel querySalesDetail(Long id);
 
-    public void updateSalesOrder(SalesOrderInfoModel order);
+	void insertSalesOrder(SalesOrderInfoModel order);
 
-    public void delSalesOrder(Long orderId);
+	void updateSalesOrder(SalesOrderInfoModel order);
+
+	void delSalesOrder(Long orderId);
+
+	StatisticsInfoModel queryStatisticsInfo(int type, String date, Long userId);
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.gaoan.forever.base.BaseService;
 import com.gaoan.forever.entity.TbStockEntity;
 import com.gaoan.forever.mapper.TbStockMapper;
+import com.gaoan.forever.model.query.OrderQueryConditionModel;
 import com.gaoan.forever.service.ITbStockService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,33 +22,31 @@ import com.github.pagehelper.PageInfo;
 @Service("TbStockServiceImpl")
 public class TbStockServiceImpl extends BaseService<TbStockEntity> implements ITbStockService {
 
-    private final Logger logger = LoggerFactory.getLogger(TbStockServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(TbStockServiceImpl.class);
 
-    @Autowired
-    private TbStockMapper tbStockMapper;
+	@Autowired
+	private TbStockMapper tbStockMapper;
 
-    /**
-     * 获取库存分页信息
-     */
-    @Override
-    public PageInfo<TbStockEntity> getStockPageInfo(TbStockEntity queryEntity, int page, int pageSize) {
-	PageHelper.startPage(page, pageSize);
-	List<TbStockEntity> list = this.queryAll(queryEntity);
-	return new PageInfo<TbStockEntity>(list);
-    }
+	/**
+	 * 获取库存分页信息
+	 */
+	@Override
+	public PageInfo<TbStockEntity> getStockPageInfo(OrderQueryConditionModel conditionModel, int page, int pageSize) {
+		PageHelper.startPage(page, pageSize);
+		List<TbStockEntity> list = tbStockMapper.queryStockList(conditionModel);
+		return new PageInfo<TbStockEntity>(list);
+	}
 
-    @Override
-    public PageInfo<String> queryPurchaseNameList(int page, int pageSize) {
-	PageHelper.startPage(page, pageSize);
-	List<String> list = tbStockMapper.queryPurchaseNameList();
-	return new PageInfo<>(list);
-    }
+	@Override
+	public List<String> queryPurchaseNameList() {
+		List<String> list = tbStockMapper.queryPurchaseNameList();
+		return list;
+	}
 
-    @Override
-    public PageInfo<String> queryGoodsList(String purchaseOrderName, int page, int pageSize) {
-	PageHelper.startPage(page, pageSize);
-	List<String> list = tbStockMapper.queryGoodsList(purchaseOrderName);
-	return new PageInfo<>(list);
-    }
+	@Override
+	public List<String> queryGoodsList(String purchaseOrderName) {
+		List<String> list = tbStockMapper.queryGoodsList(purchaseOrderName);
+		return list;
+	}
 
 }

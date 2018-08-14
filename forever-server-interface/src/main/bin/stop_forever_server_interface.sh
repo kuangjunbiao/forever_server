@@ -1,3 +1,3 @@
-echo "Killing: `cat run_trade_api_server.pid`"
-kill -9 `cat run_trade_api_server.pid`
-rm -rf run_trade_api_server.pid
+echo "Killing: `cat run_forever_server_interface.pid`"
+kill -9 `cat run_forever_server_interface.pid`
+rm -rf run_forever_server_interface.pid

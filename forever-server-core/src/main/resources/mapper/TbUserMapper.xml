@@ -112,13 +112,38 @@
 		INNER JOIN tb_resources trs ON trp.resources_id = trs."id"
 		WHERE
 			tu.user_name = #{userName}
-		ORDER BY trs."id"
+		ORDER BY trs.sort_id
+    </select>
+    
+    <select id="queryUserPage" resultType="map">
+		SELECT
+			tu.id,
+			tu.user_name "userName",
+			tu.password,
+			tu.real_name "realName",
+			tu.status,
+			tu.create_time "createTime",
+			tu.update_time "updateTime",
+			tr."id" "roleId"
+		FROM
+			tb_user tu
+		LEFT JOIN tb_user_role tur 
+			ON tu."id" = tur.user_id
+		LEFT JOIN tb_role tr 
+			ON tur.role_id = tr."id"
+		ORDER BY id
     </select>
     
     <select id="queryUserDetail" resultType="map" parameterType="java.lang.Long">
 		SELECT
-			tu.*,
-			tr."id" role_id
+			tu.id,
+			tu.user_name "userName",
+			tu.password,
+			tu.real_name "realName",
+			tu.status,
+			tu.create_time "createTime",
+			tu.update_time "updateTime",
+			tr."id" "roleId"
 		FROM
 			tb_user tu
 		LEFT JOIN tb_user_role tur 

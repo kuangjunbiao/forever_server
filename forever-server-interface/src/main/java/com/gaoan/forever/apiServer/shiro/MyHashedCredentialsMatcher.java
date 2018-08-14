@@ -6,14 +6,14 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 
 public class MyHashedCredentialsMatcher extends HashedCredentialsMatcher {
 
-    @Override
-    public void setHashAlgorithmName(String hashAlgorithmName) {
-	super.setHashAlgorithmName(hashAlgorithmName);
-    }
+	@Override
+	public void setHashAlgorithmName(String hashAlgorithmName) {
+		super.setHashAlgorithmName(hashAlgorithmName);
+	}
 
-    @Override
-    public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-	return super.doCredentialsMatch(token, info);
-    }
+	@Override
+	public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
+		return super.doCredentialsMatch(token, info);
+	}
 
 }

@@ -13,6 +13,8 @@ public interface TbUserMapper extends BaseMapper<TbUserEntity> {
 
     public List<Map<String, Object>> queryUserResources(String userName);
 
+    public List<Map<String, Object>> queryUserPage();
+    
     public Map<String, Object> queryUserDetail(Long userId);
 
 }

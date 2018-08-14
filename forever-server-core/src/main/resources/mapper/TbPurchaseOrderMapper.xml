@@ -7,6 +7,8 @@
     <resultMap id="BaseResultMap" type="com.gaoan.forever.entity.TbPurchaseOrderEntity" >
         <result column="id" property="id" javaType="Long"/>
         <result column="goods_id" property="goodsId" javaType="Long"/>
+        <result column="color_id" property="colorId" javaType="Long"/>
+        <result column="size_id" property="sizeId" javaType="Long"/>
         <result column="cost_price" property="costPrice" javaType="java.math.BigDecimal"/>
         <result column="quantity" property="quantity" javaType="Long"/>
         <result column="total" property="total" javaType="java.math.BigDecimal"/>
@@ -20,6 +22,10 @@
         <result column="goods_id" property="goodsId" javaType="Long"/>
         <result column="purchase_order_name" property="purchaseOrderName" javaType="String"/>
         <result column="goods_name" property="goodsName" javaType="String"/>
+        <result column="color_id" property="colorId" javaType="Long"/>
+        <result column="color_name" property="colorName" javaType="String"/>
+        <result column="size_id" property="sizeId" javaType="Long"/>
+        <result column="size_name" property="sizeName" javaType="String"/>
         <result column="cost_price" property="costPrice" javaType="java.math.BigDecimal"/>
         <result column="quantity" property="quantity" javaType="Long"/>
         <result column="total" property="total" javaType="java.math.BigDecimal"/>
@@ -31,7 +37,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-	id,goods_id,cost_price,quantity,total,user_id,create_time,update_time
+	id,goods_id,color_id,size_id,cost_price,quantity,total,user_id,create_time,update_time
     </sql>
     <!-- 通用WHERE条件 -->
     <sql id="Base_where_List">
@@ -41,6 +47,12 @@
         </if>
         <if test="goodsId != null">
             AND goods_id = #{goodsId}
+        </if>
+        <if test="colorId != null">
+            AND color_id = #{colorId}
+        </if>
+        <if test="sizeId != null">
+            AND size_id = #{sizeId}
         </if>
         <if test="costPrice != null">
             AND cost_price = #{costPrice}
@@ -118,17 +130,49 @@
         <include refid="Base_where_List" />
     </select>
 
+    <!-- 根据条件查询进货详情 -->
+    <select id="queryPurchaseDetail" parameterType="java.lang.Long" resultMap="PurchaseResultMap">
+		SELECT
+			tpo.*,
+			ts.purchase_order_name,
+			ts.goods_name,
+			tu.real_name,
+			tc.color_name,
+			tsi.size_name
+		FROM
+			tb_purchase_order tpo
+		INNER JOIN tb_stock ts
+		ON tpo.goods_id = ts."id"
+		AND tpo.color_id = ts.color_id
+		AND tpo.size_id = ts.size_id
+		INNER JOIN tb_color tc
+		ON tpo.color_id = tc."id"
+		INNER JOIN tb_size tsi
+   		ON tpo.size_id = tsi."id"
+		INNER JOIN tb_user tu
+		ON tpo.user_id = tu.ID
+		WHERE tpo.id = #{id}
+    </select>
+
     <!-- 根据条件查询进货信息 -->
     <select id="queryPurchaseOrder" parameterType="com.gaoan.forever.model.query.OrderQueryConditionModel" resultMap="PurchaseResultMap">
 		SELECT
 			tpo.*,
 			ts.purchase_order_name,
 			ts.goods_name,
-			tu.real_name
+			tu.real_name,
+			tc.color_name,
+			tsi.size_name
 		FROM
 			tb_purchase_order tpo
 		INNER JOIN tb_stock ts
 		ON tpo.goods_id = ts."id"
+	    AND tpo.color_id = ts.color_id
+		AND tpo.size_id = ts.size_id
+		INNER JOIN tb_color tc
+		ON tpo.color_id = tc."id"
+		INNER JOIN tb_size tsi
+    	ON tpo.size_id = tsi."id"
 		INNER JOIN tb_user tu 
 		ON tpo.user_id = tu.ID
 		WHERE
@@ -138,21 +182,56 @@
 		</if>	
 		<if test="goodsName != null and goodsName != ''">
 			AND ts.goods_name = #{goodsName}
-		</if>	
+		</if>
+		<if test="colorId != null">
+			AND ts.color_id = #{colorId}
+		</if>
+		<if test="sizeId != null">
+			AND ts.size_id = #{sizeId}
+		</if>
 		<if test="startTime != null and startTime != ''">
-			<![CDATA[AND tpo.create_time > #{startTime}]]>
+			<![CDATA[AND to_char(tpo.create_time, 'yyyy-MM-dd') >= #{startTime}]]>
 		</if>
 		<if test="endTime != null and endTime != ''">
-			<![CDATA[ AND tpo.create_time < #{endTime} ]]>
+			<![CDATA[ AND to_char(tpo.create_time, 'yyyy-MM-dd') <= #{endTime} ]]>
 		</if>
+		ORDER BY tpo.update_time DESC
+    </select>
+    
+    <select id="quertCurrTotal" resultType="java.util.Map">
+	   	SELECT
+			SUM(tpo.quantity) qty, 
+			SUM(tpo.quantity*tpo.cost_price) total
+		FROM
+			tb_purchase_order tpo
+		INNER JOIN tb_stock ts ON tpo.goods_id = ts."id"
+		AND tpo.color_id = ts.color_id
+		AND tpo.size_id = ts.size_id
+		WHERE
+			ts.id = #{id}
+    </select>
+    
+    <select id="quertTotalExcludeCurrOrder" resultType="java.util.Map">
+		SELECT
+			SUM(tpo.quantity) qty,
+			SUM(tpo.quantity * tpo.cost_price) total
+		FROM
+			tb_purchase_order tpo
+		INNER JOIN tb_stock ts 
+		ON tpo.goods_id = ts."id"
+		AND tpo.color_id = ts.color_id
+		AND tpo.size_id = ts.size_id
+		WHERE
+			ts.ID = #{id}
+		AND tpo."id" != #{orderId}
     </select>
 
     <!-- 添加 -->
     <insert id="insert" parameterType="com.gaoan.forever.entity.TbPurchaseOrderEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tb_purchase_order
-        (goods_id,cost_price,quantity,total,user_id,create_time,update_time)
+        (goods_id,color_id,size_id,cost_price,quantity,total,user_id,create_time,update_time)
         VALUES
-        (#{goodsId},#{costPrice},#{quantity},#{total},#{userId},#{createTime},#{updateTime})
+        (#{goodsId},#{colorId},#{sizeId},#{costPrice},#{quantity},#{total},#{userId},#{createTime},#{updateTime})
     </insert>
 
     <!-- 添加 (匹配有值的字段)-->
@@ -161,6 +240,12 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="goodsId != null">
             goods_id,
+            </if>
+            <if test="colorId != null">
+            color_id,
+            </if>
+            <if test="sizeId != null">
+            size_id,
             </if>
             <if test="costPrice != null">
             cost_price,
@@ -180,6 +265,12 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="goodsId != null">
             #{goodsId},
+            </if>
+            <if test="colorId != null">
+            #{colorId},
+            </if>
+            <if test="sizeId != null">
+            #{sizeId},
             </if>
             <if test="costPrice != null">
             #{costPrice},
@@ -204,6 +295,12 @@
         <set>
             <if test="goodsId != null">
             goods_id = #{goodsId},
+            </if>
+            <if test="colorId != null">
+            color_id = #{colorId},
+            </if>
+            <if test="sizeId != null">
+            size_id = #{sizeId},
             </if>
             <if test="costPrice != null">
             cost_price = #{costPrice},
@@ -230,6 +327,8 @@
         UPDATE tb_purchase_order
         <set>
             goods_id = #{goodsId},
+            color_id = #{colorId},
+            size_id = #{sizeId},
             cost_price = #{costPrice},
             quantity = #{quantity},
             total = #{total},

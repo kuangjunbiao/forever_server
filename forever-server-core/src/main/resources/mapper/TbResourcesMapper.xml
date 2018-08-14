@@ -8,12 +8,13 @@
         <result column="id" property="id" javaType="Long"/>
         <result column="resources_name" property="resourcesName" javaType="String"/>
         <result column="type" property="type" javaType="Integer"/>
+        <result column="sort_id" property="sortId" javaType="Integer"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
     </resultMap>
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-	id,resources_name,type,create_time
+	id,resources_name,type,sort_id,create_time
     </sql>
     <!-- 通用WHERE条件 -->
     <sql id="Base_where_List">
@@ -26,6 +27,9 @@
         </if>
         <if test="type != null">
             AND type = #{type}
+        </if>
+        <if test="sortId != null">
+            AND sort_id = #{sortId}
         </if>
         <if test="createTime != null">
             AND create_time = #{createTime}
@@ -65,7 +69,7 @@
         <include refid="Base_Column_List" />
         FROM tb_resources
         <include refid="Base_where_List" />
-        ORDER BY id
+        ORDER BY sort_id
     </select>
 
     <!-- 查询记录总数 -->
@@ -106,6 +110,9 @@
             <if test="type != null">
             type,
             </if>
+            <if test="sortId != null">
+            sort_id,
+            </if>
             create_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -114,6 +121,9 @@
             </if>
             <if test="type != null">
             #{type},
+            </if>
+            <if test="sortId != null">
+            #{sortId},
             </if>
             now()
         </trim>
@@ -128,6 +138,9 @@
             </if>
             <if test="type != null">
             type = #{type},
+            </if>
+            <if test="sortId != null">
+            sort_id = #{sortId},
             </if>
             <if test="createTime != null">
             create_time = #{createTime}

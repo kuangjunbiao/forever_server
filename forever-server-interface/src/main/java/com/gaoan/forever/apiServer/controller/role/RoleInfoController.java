@@ -31,94 +31,110 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "RoleInfoController", description = "角色信息控制器")
 public class RoleInfoController {
 
-    @Autowired
-    private ITbRoleService tbRoleService;
+	@Autowired
+	private ITbRoleService tbRoleService;
 
-    private static final Logger logger = LoggerFactory.getLogger(RoleInfoController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RoleInfoController.class);
 
-    @ApiOperation(value = "获取角色列表")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int", required = false),
-	    @ApiImplicitParam(name = "pageSize", value = "每页数据数", paramType = "query", dataType = "int", required = false) })
-    @RequestMapping(value = "/getRoleList", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
-    @ResponseBody
-    public Object getRoleList(HttpServletRequest request, @RequestParam(required = false, defaultValue = "1") int page,
-	    @RequestParam(required = false, defaultValue = "10") int pageSize) throws Exception {
+	@ApiOperation(value = "获取角色列表")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int", required = false),
+			@ApiImplicitParam(name = "pageSize", value = "每页数据数", paramType = "query", dataType = "int", required = false) })
+	@RequestMapping(value = "/getRolePage", produces = "application/json;charset=UTF-8", method = {
+			RequestMethod.POST })
+	@ResponseBody
+	public Object getRolePage(HttpServletRequest request, @RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "15") int pageSize) throws Exception {
 
-	PageInfo<TbRoleEntity> pageInfo = tbRoleService.getRolePageInfo(page, pageSize);
+		PageInfo<TbRoleEntity> pageInfo = tbRoleService.getRolePageInfo(page, pageSize);
 
-	Message.Builder build = Message.newBuilder();
-	build.put("pageInfo", pageInfo);
+		Message.Builder build = Message.newBuilder();
+		build.put("pageInfo", pageInfo);
 
-	return build.builldJson();
-    }
-
-    @ApiOperation(value = "获取角色详情")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/getRoleDetail", produces = "application/json;charset=UTF-8", method = {
-	    RequestMethod.GET })
-    @ResponseBody
-    public Object getRoleDetail(HttpServletRequest request, @RequestParam(required = true) String roleId)
-	    throws Exception {
-	Long role_id = Long.parseLong(roleId);
-	TbRoleEntity roleEntity = tbRoleService.queryByPrimaryKey(role_id);
-
-	if (roleEntity == null) {
-	    logger.error("roleId = {}, 不存在.", role_id);
-	    throw new AppException(MessageInfoConstant.UPDATE_INFO_DONT_EXIST);
+		return build.builldJson();
 	}
 
-	List<Long> list = tbRoleService.queryRolePermission(role_id);
+	@ApiOperation(value = "获取角色列表,不分页")
+	@ApiImplicitParams(value = {})
+	@RequestMapping(value = "/getRoleList", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
+	@ResponseBody
+	public Object getRoleList(HttpServletRequest request) throws Exception {
 
-	Message.Builder build = Message.newBuilder();
-	build.put("roleInfo", roleEntity);
-	build.put("permissionList", list);
+		List<TbRoleEntity> list = tbRoleService.queryAll(null);
 
-	return build.builldJson();
-    }
+		Message.Builder build = Message.newBuilder();
+		build.put("list", list);
 
-    @ApiOperation(value = "新增角色")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/insertRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
-    @ResponseBody
-    public Object insertRole(HttpServletRequest request, @RequestParam(required = true) String roleName)
-	    throws Exception {
+		return build.builldJson();
+	}
 
-	tbRoleService.insertRole(roleName);
-	Message.Builder build = Message.newBuilder();
+	@ApiOperation(value = "获取角色详情")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "String") })
+	@RequestMapping(value = "/getRoleDetail", produces = "application/json;charset=UTF-8", method = {
+			RequestMethod.GET })
+	@ResponseBody
+	public Object getRoleDetail(HttpServletRequest request, @RequestParam(required = true) String roleId)
+			throws Exception {
+		Long role_id = Long.parseLong(roleId);
+		TbRoleEntity roleEntity = tbRoleService.queryByPrimaryKey(role_id);
 
-	return build.builldJson();
-    }
+		if (roleEntity == null) {
+			logger.error("roleId = {}, 不存在.", role_id);
+			throw new AppException(MessageInfoConstant.UPDATE_INFO_DONT_EXIST);
+		}
 
-    @ApiOperation(value = "修改角色")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "String"),
-	    @ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String"),
-	    @ApiImplicitParam(name = "resourcesIdList", value = "资源列表", paramType = "body", dataType = "json") })
-    @RequestMapping(value = "/updateRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
-    @ResponseBody
-    public Object updateRole(HttpServletRequest request, @RequestParam(required = true) String roleId,
-	    @RequestParam(required = true) String roleName, @RequestBody List<Long> resourcesIdList) throws Exception {
+		List<Long> list = tbRoleService.queryRolePermission(role_id);
 
-	tbRoleService.updateRole(roleId, roleName, resourcesIdList);
-	Message.Builder build = Message.newBuilder();
+		Message.Builder build = Message.newBuilder();
+		build.put("info", roleEntity);
+		build.put("permissionList", list);
 
-	return build.builldJson();
-    }
+		return build.builldJson();
+	}
 
-    @ApiOperation(value = "删除角色")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "Long") })
-    @RequestMapping(value = "/delRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
-    @ResponseBody
-    public Object delRole(HttpServletRequest request, @RequestParam(required = true) Long roleId) throws Exception {
+	@ApiOperation(value = "新增角色")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "resourceIdList", value = "资源id列表", paramType = "body", dataType = "json") })
+	@RequestMapping(value = "/insertRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
+	@ResponseBody
+	public Object insertRole(HttpServletRequest request, @RequestParam(required = true) String roleName,
+			@RequestBody(required = false) List<Long> resourceIdList) throws Exception {
 
-	tbRoleService.delRole(roleId);
-	Message.Builder build = Message.newBuilder();
+		tbRoleService.insertRole(roleName, resourceIdList);
+		Message.Builder build = Message.newBuilder();
 
-	return build.builldJson();
-    }
+		return build.builldJson();
+	}
+
+	@ApiOperation(value = "修改角色")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "Long"),
+			@ApiImplicitParam(name = "roleName", value = "角色名称", paramType = "query", dataType = "String"),
+			@ApiImplicitParam(name = "resourcesIdList", value = "资源列表", paramType = "body", dataType = "json") })
+	@RequestMapping(value = "/updateRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
+	@ResponseBody
+	public Object updateRole(HttpServletRequest request, @RequestParam(required = true) Long roleId,
+			@RequestParam(required = true) String roleName, @RequestBody(required = false) List<Long> resourcesIdList)
+					throws Exception {
+		tbRoleService.updateRole(roleId, roleName, resourcesIdList);
+		Message.Builder build = Message.newBuilder();
+
+		return build.builldJson();
+	}
+
+	@ApiOperation(value = "删除角色")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "roleId", value = "角色编号", paramType = "query", dataType = "Long") })
+	@RequestMapping(value = "/delRole", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
+	@ResponseBody
+	public Object delRole(HttpServletRequest request, @RequestParam(required = true) Long roleId) throws Exception {
+
+		tbRoleService.delRole(roleId);
+		Message.Builder build = Message.newBuilder();
+
+		return build.builldJson();
+	}
 
 }

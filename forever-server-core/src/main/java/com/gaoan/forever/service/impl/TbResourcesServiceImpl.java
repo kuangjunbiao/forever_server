@@ -25,89 +25,89 @@ import com.github.pagehelper.PageInfo;
 @Service("TbResourcesServiceImpl")
 public class TbResourcesServiceImpl extends BaseService<TbResourcesEntity> implements ITbResourcesService {
 
-    private final Logger logger = LoggerFactory.getLogger(TbResourcesServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(TbResourcesServiceImpl.class);
 
-    @Autowired
-    private TbRolePermissionMapper rolePermissionMapper;
+	@Autowired
+	private TbRolePermissionMapper rolePermissionMapper;
 
-    @Override
-    public PageInfo<TbResourcesEntity> getResourcesPageInfo(int pageNum, int pageSize) {
-	PageHelper.startPage(pageNum, pageSize);
-	List<TbResourcesEntity> list = this.queryAll(null);
-	return new PageInfo<TbResourcesEntity>(list);
-    }
-
-    @Override
-    public TbResourcesEntity getResourcesDetail(Long resourcesId) {
-	TbResourcesEntity resourcesEntity = this.queryByPrimaryKey(resourcesId);
-	if (resourcesEntity == null) {
-	    throw new AppException(MessageInfoConstant.UPDATE_INFO_DONT_EXIST);
-	}
-	return resourcesEntity;
-    }
-
-    @Override
-    public void insertResources(String resourcesName, Integer type) {
-	if (StringUtils.isEmpty(resourcesName) || type == null) {
-	    throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+	@Override
+	public PageInfo<TbResourcesEntity> getResourcesPageInfo(int pageNum, int pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<TbResourcesEntity> list = this.queryAll(null);
+		return new PageInfo<TbResourcesEntity>(list);
 	}
 
-	resourcesName = resourcesName.trim();
-
-	TbResourcesEntity queryEntity = new TbResourcesEntity();
-	queryEntity.setResourcesName(resourcesName);
-	queryEntity.setType(type);
-	TbResourcesEntity resourcesEntity = this.queryInfoByEntity(queryEntity);
-
-	if (resourcesEntity != null) {
-	    throw new AppException(MessageInfoConstant.RESOURCES_NAME_IS_EXIST);
+	@Override
+	public TbResourcesEntity getResourcesDetail(Long resourcesId) {
+		TbResourcesEntity resourcesEntity = this.queryByPrimaryKey(resourcesId);
+		if (resourcesEntity == null) {
+			throw new AppException(MessageInfoConstant.UPDATE_INFO_DONT_EXIST);
+		}
+		return resourcesEntity;
 	}
 
-	int result = this.insertSelective(queryEntity);
-	if (result < 1) {
-	    throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
-	}
-    }
+	@Override
+	public void insertResources(String resourcesName, Integer type) {
+		if (StringUtils.isEmpty(resourcesName) || type == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
 
-    @Override
-    public void updateResources(Long resourcesId, String resourcesName, Integer type) {
-	if (resourcesId == null || StringUtils.isEmpty(resourcesName) || type == null) {
-	    throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
-	}
+		resourcesName = resourcesName.trim();
 
-	resourcesName = resourcesName.trim();
+		TbResourcesEntity queryEntity = new TbResourcesEntity();
+		queryEntity.setResourcesName(resourcesName);
+		queryEntity.setType(type);
+		TbResourcesEntity resourcesEntity = this.queryInfoByEntity(queryEntity);
 
-	TbResourcesEntity queryEntity = new TbResourcesEntity();
-	queryEntity.setResourcesName(resourcesName);
-	queryEntity.setType(type);
-	TbResourcesEntity resourcesEntity = this.queryInfoByEntity(queryEntity);
+		if (resourcesEntity != null) {
+			throw new AppException(MessageInfoConstant.RESOURCES_NAME_IS_EXIST);
+		}
 
-	if (resourcesEntity != null && resourcesEntity.getId().longValue() != resourcesId.longValue()) {
-	    throw new AppException(MessageInfoConstant.RESOURCES_NAME_IS_EXIST);
-	}
-
-	queryEntity.setId(resourcesId);
-	int result = this.updateByPrimaryKeySelective(queryEntity);
-	if (result < 1) {
-	    throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
-	}
-    }
-
-    /**
-     * 删除资源
-     */
-    @Transactional
-    @Override
-    public void delResources(Long resourcesId) {
-	// 删除资源
-	int result = this.deleteByPrimaryKey(resourcesId);
-	if (result < 1) {
-	    throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
+		int result = this.insertSelective(queryEntity);
+		if (result < 1) {
+			throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
+		}
 	}
 
-	// 删除角色资源信息
-	result = rolePermissionMapper.deleteByPermissionId(resourcesId);
-	logger.info("删除资源, resourcesId = {}, 对应角色{}条", resourcesId, result);
-    }
+	@Override
+	public void updateResources(Long resourcesId, String resourcesName, Integer type) {
+		if (resourcesId == null || StringUtils.isEmpty(resourcesName) || type == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+
+		resourcesName = resourcesName.trim();
+
+		TbResourcesEntity queryEntity = new TbResourcesEntity();
+		queryEntity.setResourcesName(resourcesName);
+		queryEntity.setType(type);
+		TbResourcesEntity resourcesEntity = this.queryInfoByEntity(queryEntity);
+
+		if (resourcesEntity != null && resourcesEntity.getId().longValue() != resourcesId.longValue()) {
+			throw new AppException(MessageInfoConstant.RESOURCES_NAME_IS_EXIST);
+		}
+
+		queryEntity.setId(resourcesId);
+		int result = this.updateByPrimaryKeySelective(queryEntity);
+		if (result < 1) {
+			throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
+		}
+	}
+
+	/**
+	 * 删除资源
+	 */
+	@Transactional
+	@Override
+	public void delResources(Long resourcesId) {
+		// 删除资源
+		int result = this.deleteByPrimaryKey(resourcesId);
+		if (result < 1) {
+			throw new AppException(MessageInfoConstant.COMMON_ERROR_CODE);
+		}
+
+		// 删除角色资源信息
+		result = rolePermissionMapper.deleteByPermissionId(resourcesId);
+		logger.info("删除资源, resourcesId = {}, 对应角色{}条", resourcesId, result);
+	}
 
 }

@@ -13,16 +13,7 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
 	public static void main(String[] args) {
-		// for (int i=0; i<10; i++) {
-		// System.out.println(getRandomString(32, true, true));
-		// }
-		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// Date date = new Date();
-		// System.out.println(sdf.format(date));
-		//
-		// long time = date.getTime();
-		// Date date1 = new Date(time);
-		// System.out.println(sdf.format(date1));
+		//System.out.println(org.apache.commons.lang3.StringUtils.isNumeric("22"));
 	}
 
 	/**
@@ -128,8 +119,8 @@ public class StringUtils {
 		}
 		return str.trim();
 	}
-	
-    public static String trim(String str) {
-        return str == null ? null : str.trim();
-    }
+
+	public static String trim(String str) {
+		return str == null ? null : str.trim();
+	}
 }

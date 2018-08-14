@@ -1,7 +1,6 @@
 package com.gaoan.forever.apiServer.shiro;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;

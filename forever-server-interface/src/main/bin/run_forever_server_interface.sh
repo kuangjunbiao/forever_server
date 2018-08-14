@@ -4,7 +4,7 @@ echo "forever-server-interface on...."
 
 if find -name run_forever_server_interface.pid | grep "run_forever_server_interface.pid";
 then
-echo "trade-api-server is running..."
+echo "forever-server-interface is running..."
   exit
 fi 
 

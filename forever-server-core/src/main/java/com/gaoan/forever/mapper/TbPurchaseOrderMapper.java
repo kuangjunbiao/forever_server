@@ -1,6 +1,9 @@
 package com.gaoan.forever.mapper;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.gaoan.forever.base.BaseMapper;
 import com.gaoan.forever.entity.TbPurchaseOrderEntity;
@@ -12,5 +15,11 @@ import com.gaoan.forever.model.result.PurchaseOrderInfoModel;
  */
 public interface TbPurchaseOrderMapper extends BaseMapper<TbPurchaseOrderEntity> {
 
-    public List<PurchaseOrderInfoModel> queryPurchaseOrder(OrderQueryConditionModel condition);
+	List<PurchaseOrderInfoModel> queryPurchaseOrder(OrderQueryConditionModel condition);
+
+	PurchaseOrderInfoModel queryPurchaseDetail(Long id);
+
+	Map<String, Object> quertCurrTotal(Long id);
+
+	Map<String, Object> quertTotalExcludeCurrOrder(@Param("id") Long id, @Param("orderId") Long orderId);
 }

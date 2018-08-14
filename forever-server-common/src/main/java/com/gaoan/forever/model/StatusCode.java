@@ -11,9 +11,9 @@ import java.util.HashMap;
 public enum StatusCode {
 
 	/* 通用错误 */
-	COMMON_ERROR_CODE("common_code", -1, "FAIL", "操作失败"), 
-	
-    ;
+	COMMON_ERROR_CODE("common_code", -1, "FAIL", "操作失败"),
+
+	;
 
 	private String belong;
 	private int code;
@@ -49,7 +49,7 @@ public enum StatusCode {
 	public int getCode() {
 		return code;
 	}
-	
+
 	public String getMsgEn() {
 		return msgEn;
 	}
@@ -57,8 +57,6 @@ public enum StatusCode {
 	public String getMsgCn() {
 		return msgCn;
 	}
-
-
 
 	public static class Constants {
 

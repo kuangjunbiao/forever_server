@@ -12,13 +12,13 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ITbRoleService extends IBaseService<TbRoleEntity> {
 
-    public PageInfo<TbRoleEntity> getRolePageInfo(int page, int pageSize);
+	public PageInfo<TbRoleEntity> getRolePageInfo(int page, int pageSize);
 
-    public List<Long> queryRolePermission(Long roleId);
+	public List<Long> queryRolePermission(Long roleId);
 
-    public void insertRole(String roleName);
+	public void insertRole(String roleName, List<Long> resourcesIdList);
 
-    public void updateRole(String roleId, String roleName, List<Long> resourcesIdList);
+	public void updateRole(Long roleId, String roleName, List<Long> resourcesIdList);
 
-    public void delRole(Long roleId);
+	public void delRole(Long roleId);
 }

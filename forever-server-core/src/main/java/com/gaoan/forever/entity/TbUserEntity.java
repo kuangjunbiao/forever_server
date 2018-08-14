@@ -30,7 +30,7 @@ public class TbUserEntity extends BaseEntity implements Serializable {
     /** 用户真实姓名 **/
     @ApiModelProperty("用户真实姓名")
     private String realName;
-    /** 状态, 0:安全中心未认证, 1:安全中心已认证, 2:安全中心认证失败, 3:银行卡未认证, 4:银行卡已认证, 5:银行卡认证失败 **/
+    /** 状态**/
     @ApiModelProperty("状态, 0:无效, 1:有效")
     private Integer status;
     /** 创建时间 **/

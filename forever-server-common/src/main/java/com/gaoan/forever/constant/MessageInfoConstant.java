@@ -15,7 +15,8 @@ public enum MessageInfoConstant {
        REQUEST_TIMESTAMP_IS_INVALID(-10008,"请求时间戳无效","Request timestamp is invalid"),
        
        LOGIN_USERNAME_PASSWORD_ISNULL(10001, "登录账号/密码不能为空", "Username/password can't be empty"),
-       USER_REGISTER_FIAL(10002, "用户注册失败,请联系管理员", "User registration failed, please contact administrator"),
+       ACCOUNT_IS_LOCK(10002, "账户已经被锁定登录,请与管理员联系", "The account is locked, please contact administrator"),
+       ACCOUNT_OR_PASSWORD_IS_ERROR(10003, "帐号或密码错误,请重新输入", "Please enter correct username or password"),
        USER_HAD_NOT_LOGIN(10004, "用户未登录", "User not login"),
        USER_LOGIN_PASSWORD_CANNOT_BE_EMPTY(10008, "请输入正确的登录密码", "Please enter correct login password"),
        THE_USER_PASSWORD_MISTAKE(10012, "账户密码错误", "Please enter correct password"),
@@ -25,6 +26,7 @@ public enum MessageInfoConstant {
        DATAS_INFO_IS_NOT_EXIST(20004, "数据错误", "Data error"),
        PLEASE_CHECK_PARAM(20013, "请仔细检查数据完整", "Check the parameter whether complete or not"),
 
+       DEL_INFO_FAIL(30000, "数据删除失败", "Data delete failed"),
        ROLE_INFO_IS_USE(30005, "角色已被使用,不允许删除", "The role is using, which unallowed to deleted"),
        ROLE_NAME_IS_EXIST(30006, "角色名已经存在", "Role name is exists"),
        RESOURCES_NAME_IS_EXIST(30010, "资源名称已经存在", "Resource name is exists"),
@@ -34,10 +36,14 @@ public enum MessageInfoConstant {
        SAVLE_VAR_CODE_NOT_PASS(30052, "动态安全码验证不通过", "Dynamic password verify failed"),
        UPDATE_INFO_DONT_EXIST(30060, "数据不存在", "No data"),
        EXPORT_DATA_IS_EMPTY(30068, "导出数据为空", "Export data is empty"),
-       
        // TODO
+       COLOR_IS_EXISTS(30069, "颜色已存在", "Color already exists"),
+       SIZE_IS_EXISTS(30070, "尺寸已存在", "Size already exists"),
+       
        NOT_ENOUGH_INVENTORY(40001, "没有足够的库存", "Not enough inventory"),
        PRODUCT_ALREADY_EXISTS(40002, "该商品已存在", "The product already exists"),
+       PASSWORD_NOT_SAME(40003, "密码不一致", "Password is not the same"),
+       USER_REGISTER_FIAL(40004, "用户注册失败,请联系管理员", "User registration failed, please contact administrator"),
        
        IMAGE_UPLAOD_FAIL(60003, "图片上传失败", "Image upload failed"),
        IMAGE_TYPE_UNKNOWN(60004, "上传文件非图片类型", "Unknown image type"),
@@ -60,7 +66,7 @@ public enum MessageInfoConstant {
 	REQUEST_TIMESTAMP_IS_INVALID(-10008,"请求时间戳无效","Request timestamp is invalid"),
 	
 	LOGIN_USERNAME_PASSWORD_ISNULL(10001, "登录账号/密码不能为空", "Username/password can't be empty"),
-	ACCOUNT_IS_LOCK(10002, "账户已经被锁定登录,请与管理员联系", "The account is locked, please contact administrator"),
+	
 	ACCOUNT_OR_PASSWORD_IS_ERROR(10003, "帐号或密码错误,请重新输入", "Please enter correct username or password"),
 	USER_HAD_NOT_LOGIN(10004, "用户未登录", "User not login"),
 	USER_LOGIN_FAIL(10005, "用户登录失败", "Login failed"),

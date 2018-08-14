@@ -23,7 +23,6 @@ import com.gaoan.forever.constant.UserConstant;
 import com.gaoan.forever.entity.TbRolePermissionEntity;
 import com.gaoan.forever.entity.TbUserEntity;
 import com.gaoan.forever.service.ITbRolePermissionService;
-import com.gaoan.forever.service.ITbUserRoleService;
 import com.gaoan.forever.service.ITbUserService;
 import com.gaoan.forever.shiro.util.SysSecurityUtils;
 
@@ -34,77 +33,75 @@ import com.gaoan.forever.shiro.util.SysSecurityUtils;
  */
 public class MyShiroRealm extends AuthorizingRealm {
 
-    @Autowired
-    private ITbUserService tbUserService;
+	@Autowired
+	private ITbUserService tbUserService;
 
-    @Autowired
-    private ITbUserRoleService tbUserRoleService;
+	@Autowired
+	private ITbRolePermissionService tbRolePermissionService;
 
-    @Autowired
-    private ITbRolePermissionService tbRolePermissionService;
+	// 授权
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 
-    // 授权
-    // @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+		TbUserEntity user = (TbUserEntity) SecurityUtils.getSubject().getPrincipal();
 
-	TbUserEntity user = (TbUserEntity) SecurityUtils.getSubject().getPrincipal();
+		List<TbRolePermissionEntity> resourcesList = tbRolePermissionService.queryAll(null);
 
-	List<TbRolePermissionEntity> resourcesList = tbRolePermissionService.queryAll(null);
-
-	// 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
-	SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-	// for (TbResourcesEntity resources : resourcesList) {
-	// info.addStringPermission(resources.getResUrl());//
-	// user:list;user:create
-	// }
-	return info;
-    }
-
-    // 认证
-    @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
-	// 获取用户的输入的账号.
-	String userName = (String) token.getPrincipal();
-
-	TbUserEntity queryEntity = new TbUserEntity();
-	queryEntity.setUserName(userName);
-	TbUserEntity userEntity = tbUserService.queryInfoByEntity(queryEntity);
-
-	SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userEntity, userEntity.getPassword(),
-		ByteSource.Util.bytes(userName), getName());
-
-	setSession(UserConstant.SESSION_LOGIN_USER_KEY, userEntity);
-	SysSecurityUtils.getSubject().getSession()
-		.setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, userName);
-	return authenticationInfo;
-    }
-
-    /**
-     * 指定principalCollection 清除
-     */
-    public void clearCachedAuthorizationInfo(PrincipalCollection principalCollection) {
-
-	SimplePrincipalCollection principals = new SimplePrincipalCollection(principalCollection, getName());
-	super.clearCachedAuthorizationInfo(principals);
-    }
-
-    @Override
-    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-	MyHashedCredentialsMatcher hashedCredentialsMatcher = new MyHashedCredentialsMatcher();
-	hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-	super.setCredentialsMatcher(hashedCredentialsMatcher);
-    }
-
-    private void setSession(Object key, Object value) {
-	Subject currentUser = SecurityUtils.getSubject();
-	if (null != currentUser) {
-	    Session session = currentUser.getSession();
-	    if (null != session) {
-		session.setAttribute(key, value);
-	    }
+		// 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		// for (TbResourcesEntity resources : resourcesList) {
+		// info.addStringPermission(resources.getResUrl());//
+		// user:list;user:create
+		// }
+		return info;
 	}
-    }
+
+	// 认证
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+		// 获取用户的输入的账号.
+		String userName = (String) token.getPrincipal();
+
+		TbUserEntity queryEntity = new TbUserEntity();
+		queryEntity.setUserName(userName);
+		TbUserEntity userEntity = tbUserService.queryInfoByEntity(queryEntity);
+
+		SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userEntity, userEntity.getPassword(),
+				ByteSource.Util.bytes(userName), getName());
+
+		setSession(UserConstant.SESSION_LOGIN_USER_KEY, userEntity);
+		SysSecurityUtils.getSubject().getSession()
+				.setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, userName);
+		return authenticationInfo;
+	}
+
+	/**
+	 * 指定principalCollection 清除
+	 */
+	public void clearCachedAuthorizationInfo(PrincipalCollection principalCollection) {
+
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(principalCollection, getName());
+		super.clearCachedAuthorizationInfo(principals);
+	}
+
+	@Override
+	public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+		MyHashedCredentialsMatcher hashedCredentialsMatcher = new MyHashedCredentialsMatcher();
+		hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+		super.setCredentialsMatcher(hashedCredentialsMatcher);
+	}
+
+	private void setSession(Object key, Object value) {
+		Subject currentUser = SecurityUtils.getSubject();
+		if (null != currentUser) {
+			Session session = currentUser.getSession();
+			// 设置超时时间ms 12小时
+			session.setTimeout(12 * 60 * 60 * 1000);
+			if (null != session) {
+				session.setAttribute(key, value);
+			}
+		}
+	}
 
 }

@@ -33,86 +33,62 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "UserSaleController", description = "用户安全信息控制器")
 public class UserSaleController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserSaleController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserSaleController.class);
 
-    @Autowired
-    private ITbUserService tbUserService;
+	@Autowired
+	private ITbUserService tbUserService;
 
-    @ApiOperation(value = "用户注册")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "map", value = "请求参数", paramType = "body", dataType = "String") })
-    @RequestMapping(value = "/register", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
-    @ResponseBody
-    public Object register(HttpServletRequest request, @RequestBody(required = true) Map<String, String> map)
-	    throws Exception {
+	@ApiOperation(value = "用户登录")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "map", value = "请求参数", paramType = "body", dataType = "String") })
+	@RequestMapping(value = "/login", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
+	@ResponseBody
+	public Object login(HttpServletRequest request, @RequestBody(required = true) Map<String, String> map)
+			throws Exception {
 
-	if (map == null || map.isEmpty()) {
-	    throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		Message.Builder builder = Message.newBuilder();
+		Subject subject = SecurityUtils.getSubject();
+		logger.info("request sessionId = {} ", request.getSession().getId());
+		logger.info("subject sessionId = {} ", subject.getSession().getId());
+
+		if (map == null || map.isEmpty()) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+
+		String userName = map.get("userName");
+		String password = map.get("password");
+
+		tbUserService.login(userName, password);
+
+		UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
+
+		try {
+			subject.login(token);
+		} catch (Exception e) {
+			throw new AppException(MessageInfoConstant.ACCOUNT_OR_PASSWORD_IS_ERROR);
+		}
+
+		// 获取当前用户具有权限的菜单
+		List<Map<String, Object>> list = tbUserService.queryUserResources(userName.trim());
+
+		builder.put("list", list);
+		builder.put("sessionId", subject.getSession().getId());
+		return builder.builldJson();
 	}
 
-	String userName = map.get("userName");
-	String password = map.get("password");
-	String realName = map.get("realName");
+	@ApiOperation(value = "用户退出")
+	@ApiImplicitParams(value = {})
+	@RequestMapping(value = "/loginout", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
+	@ResponseBody
+	public Object loginout(HttpServletRequest request) throws Exception {
 
-	// TODO 默认普通角色
-	tbUserService.registerUser(userName, password, realName);
+		Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 
-	Message.Builder builder = Message.newBuilder();
+		subject.getSession().removeAttribute(UserConstant.SESSION_LOGIN_USER_KEY);
 
-	return builder.builldJson();
-    }
-
-    @ApiOperation(value = "用户登录")
-    @ApiImplicitParams(value = {
-	    @ApiImplicitParam(name = "map", value = "请求参数", paramType = "body", dataType = "String") })
-    @RequestMapping(value = "/login", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST })
-    @ResponseBody
-    public Object login(HttpServletRequest request, @RequestBody(required = true) Map<String, String> map)
-	    throws Exception {
-
-	Message.Builder builder = Message.newBuilder();
-	Subject subject = SecurityUtils.getSubject();
-	logger.info("request sessionId = {} ", request.getSession().getId());
-	logger.info("subject sessionId = {} ", subject.getSession().getId());
-
-	if (map == null || map.isEmpty()) {
-	    throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		Message.Builder builder = Message.newBuilder();
+		return builder.builldJson();
 	}
-
-	String userName = map.get("userName");
-	String password = map.get("password");
-
-	tbUserService.login(userName, password);
-
-	UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
-
-	try {
-	    subject.login(token);
-	} catch (Exception e) {
-	    throw new AppException(MessageInfoConstant.THE_USER_PASSWORD_MISTAKE);
-	}
-
-	// 获取当前用户具有权限的菜单
-	List<Map<String, Object>> list = tbUserService.queryUserResources(userName.trim());
-
-	builder.put("list", list);
-	builder.put("sessionId", subject.getSession().getId());
-	return builder.builldJson();
-    }
-
-    @ApiOperation(value = "用户退出")
-    @ApiImplicitParams(value = {})
-    @RequestMapping(value = "/loginout", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET })
-    @ResponseBody
-    public Object loginout(HttpServletRequest request) throws Exception {
-
-	Subject subject = SecurityUtils.getSubject();
-	subject.logout();
-
-	subject.getSession().removeAttribute(UserConstant.SESSION_LOGIN_USER_KEY);
-
-	Message.Builder builder = Message.newBuilder();
-	return builder.builldJson();
-    }
 
 }

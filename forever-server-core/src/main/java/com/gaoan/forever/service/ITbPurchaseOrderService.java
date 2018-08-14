@@ -12,14 +12,16 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ITbPurchaseOrderService extends IBaseService<TbPurchaseOrderEntity> {
 
-    public PageInfo<PurchaseOrderInfoModel> queryPurchaseOrder(OrderQueryConditionModel condition, int page,
-	    int pageSize);
+	public PageInfo<PurchaseOrderInfoModel> queryPurchaseOrder(OrderQueryConditionModel condition, int page,
+			int pageSize);
 
-    public void insertPurchaseOrderByHave(PurchaseOrderInfoModel model);
+	public PurchaseOrderInfoModel queryPurchaseDetail(Long id);
 
-    public void insertPurchaseOrderByUnHave(PurchaseOrderInfoModel model);
+	public void insertPurchaseOrderByHave(PurchaseOrderInfoModel model);
 
-    public void updatePurchaseOrder(PurchaseOrderInfoModel order);
+	public void insertPurchaseOrderByUnHave(PurchaseOrderInfoModel model);
 
-    public void delPurchaseOrder(Long orderId);
+	public void updatePurchaseOrder(PurchaseOrderInfoModel order);
+
+	public void delPurchaseOrder(Long orderId);
 }

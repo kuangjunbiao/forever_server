@@ -2,8 +2,8 @@ spring:
   redis:
     port: 6379
     hostName: 127.0.0.1
-    password: 123456
-    database: 0     #redis数据库下标
+    password: 654321
+    database: 1     #redis数据库下标
     timeout: 2000   #超时设置
     poolConfig:
       minIdle: 1      # 最小空闲

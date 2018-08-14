@@ -1,7 +1,5 @@
 package com.gaoan.forever.exception;
 
-import com.gaoan.forever.constant.StatusConstant;
-
 /**
  *
  * @Title: DotnarException.java
@@ -18,161 +16,138 @@ import com.gaoan.forever.constant.StatusConstant;
  */
 public class DotnarException extends RuntimeException {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private int id;// mapper 报的异常 编号为2，其他系统运行异常目前编号为1,调用接口异常编号为3
+	private int id;// mapper 报的异常 编号为2，其他系统运行异常目前编号为1,调用接口异常编号为3
 
-    private String className;
+	private String className;
 
-    private String methodName;
+	private String methodName;
 
-    private int rowNum;
+	private int rowNum;
 
-    private String message;
+	private String message;
 
-    private StatusConstant statusConstant;
+	/**
+	 * 异常详情
+	 */
+	private String remark;
 
-    /**
-     * 异常详情
-     */
-    private String remark;
-
-    public DotnarException() {
-	super();
-    }
-
-    public DotnarException(String message) {
-	super();
-	this.message = message;
-    }
-
-    public DotnarException(int id, String message) {
-	super();
-	this.id = id;
-	this.message = message;
-	StackTraceElement stack[] = (new Throwable()).getStackTrace();
-	for (int i = 0; i < stack.length; i++) {
-	    StackTraceElement ste = stack[i];
-	    this.className = ste.getClassName();
-	    this.methodName = ste.getMethodName();
-	    this.rowNum = ste.getLineNumber();
+	public DotnarException() {
+		super();
 	}
-    }
 
-    /**
-     * 构造
-     * 
-     * @param id
-     *            异常编号 其他系统运行异常目前编号为1, DAO 报的异常 编号为2，调用接口异常编号为3
-     * @param message
-     *            提示信息
-     * @param remark
-     *            异常详情
-     */
-    public DotnarException(int id, String message, String remark) {
-	super();
-	this.id = id;
-	this.message = message;
-	this.remark = remark;
-	StackTraceElement stack[] = (new Throwable()).getStackTrace();
-	for (int i = 0; i < stack.length; i++) {
-	    StackTraceElement ste = stack[i];
-	    this.className = ste.getClassName();
-	    this.methodName = ste.getMethodName();
-	    this.rowNum = ste.getLineNumber();
+	public DotnarException(String message) {
+		super();
+		this.message = message;
 	}
-    }
 
-    public DotnarException(DotnarException e) {
-	this.id = e.getId();
-	this.message = e.getMessage();
-	StackTraceElement stack[] = (new Throwable()).getStackTrace();
-	for (int i = 0; i < stack.length; i++) {
-	    StackTraceElement ste = stack[i];
-	    this.className = ste.getClassName();
-	    this.methodName = ste.getMethodName();
-	    this.rowNum = ste.getLineNumber();
+	public DotnarException(int id, String message) {
+		super();
+		this.id = id;
+		this.message = message;
+		StackTraceElement stack[] = (new Throwable()).getStackTrace();
+		for (int i = 0; i < stack.length; i++) {
+			StackTraceElement ste = stack[i];
+			this.className = ste.getClassName();
+			this.methodName = ste.getMethodName();
+			this.rowNum = ste.getLineNumber();
+		}
 	}
-    }
 
-    public DotnarException(StatusConstant e) {
-	this.id = Integer.parseInt(e.getStatus());
-	this.message = e.getDesc();
-	this.statusConstant = e;
-	StackTraceElement stack[] = (new Throwable()).getStackTrace();
-	for (int i = 0; i < stack.length; i++) {
-	    StackTraceElement ste = stack[i];
-	    this.className = ste.getClassName();
-	    this.methodName = ste.getMethodName();
-	    this.rowNum = ste.getLineNumber();
+	/**
+	 * 构造
+	 * 
+	 * @param id
+	 *            异常编号 其他系统运行异常目前编号为1, DAO 报的异常 编号为2，调用接口异常编号为3
+	 * @param message
+	 *            提示信息
+	 * @param remark
+	 *            异常详情
+	 */
+	public DotnarException(int id, String message, String remark) {
+		super();
+		this.id = id;
+		this.message = message;
+		this.remark = remark;
+		StackTraceElement stack[] = (new Throwable()).getStackTrace();
+		for (int i = 0; i < stack.length; i++) {
+			StackTraceElement ste = stack[i];
+			this.className = ste.getClassName();
+			this.methodName = ste.getMethodName();
+			this.rowNum = ste.getLineNumber();
+		}
 	}
-    }
 
-    public int getId() {
-	return id;
-    }
+	public DotnarException(DotnarException e) {
+		this.id = e.getId();
+		this.message = e.getMessage();
+		StackTraceElement stack[] = (new Throwable()).getStackTrace();
+		for (int i = 0; i < stack.length; i++) {
+			StackTraceElement ste = stack[i];
+			this.className = ste.getClassName();
+			this.methodName = ste.getMethodName();
+			this.rowNum = ste.getLineNumber();
+		}
+	}
 
-    public void setId(int id) {
-	this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getClassName() {
-	return className;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setClassName(String className) {
-	this.className = className;
-    }
+	public String getClassName() {
+		return className;
+	}
 
-    public String getMethodName() {
-	return methodName;
-    }
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
-    public void setMethodName(String methodName) {
-	this.methodName = methodName;
-    }
+	public String getMethodName() {
+		return methodName;
+	}
 
-    public int getRowNum() {
-	return rowNum;
-    }
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
 
-    public void setRowNum(int rowNum) {
-	this.rowNum = rowNum;
-    }
+	public int getRowNum() {
+		return rowNum;
+	}
 
-    public String getMessage() {
-	return message;
-    }
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
 
-    public DotnarException setMessage(String message) {
-	this.message = message;
-	return this;
-    }
+	public String getMessage() {
+		return message;
+	}
 
-    public StatusConstant getStatusConstant() {
-	return statusConstant;
-    }
+	public DotnarException setMessage(String message) {
+		this.message = message;
+		return this;
+	}
 
-    public void setStatusConstant(StatusConstant statusConstant) {
-	this.statusConstant = statusConstant;
-    }
+	@Override
+	public String toString() {
+		return "DotnarException:" + "\nDotnarException id:" + id + "\nDotnarException className:" + className
+				+ "\nDotnarException methodName:" + methodName + "\nDotnarException rowNum:" + rowNum
+				+ "\nDotnarException message:" + message + "\nDotnarException remark:" + remark;
+	}
 
-    @Override
-    public String toString() {
-	return "DotnarException:" + "\nDotnarException id:" + id + "\nDotnarException className:" + className
-		+ "\nDotnarException methodName:" + methodName + "\nDotnarException rowNum:" + rowNum
-		+ "\nDotnarException message:" + message + "\nDotnarException remark:" + remark;
-    }
+	public String getRemark() {
+		return remark;
+	}
 
-    public String getRemark() {
-	return remark;
-    }
-
-    public void setRemark(String remark) {
-	this.remark = remark;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 }

@@ -9,9 +9,6 @@ import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.gaoan.forever.constant.RedisConstant;
-import com.gaoan.forever.utils.cache.CacheUtils;
-
 /**
  * 生成订单编号帮助类 Created by NO.9527 on 2017年7月21日
  */
@@ -59,66 +56,4 @@ public class OrderNumberUtil implements Serializable {
 		return result;
 	}
 
-	private static void buildMark() {
-		String mark = getRandom(2);
-		Object cacheObj = CacheUtils.getHashOpsByField(RedisConstant.REDIS_KEY_HZ_ORDERNUMBERMARK, mark);
-		if (cacheObj == null) {
-			SYSTEMMARK = mark;
-			CacheUtils.putHashOps(RedisConstant.REDIS_KEY_HZ_ORDERNUMBERMARK, SYSTEMMARK, SYSTEMMARK);
-		} else {
-			// buildMark();
-			SYSTEMMARK = (String) cacheObj;
-		}
-	}
-
-	/**
-	 * 创建流水号
-	 * 
-	 * @param flage
-	 * @return
-	 */
-	public static synchronized String buildNo(String flage) {
-		if (StringUtils.isBlank(SYSTEMMARK)) {
-			buildMark();
-		}
-		long t = System.currentTimeMillis();
-		if (lasttime == t) {
-			if (SEQ > MAX) {
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				SEQ = 0;
-			}
-		}
-		String date = new SimpleDateFormat("YYHHmmssSSS").format(new Date());
-		SEQ++;
-		lasttime = t;
-		StringBuffer sb = new StringBuffer("");
-		sb.append(flage.trim());
-		if (StringUtils.isNotBlank(SYSTEMMARK))
-			sb.append(SYSTEMMARK.trim());
-		sb.append(date).append(SEQ);
-		return sb.toString();
-	}
-
-	/**
-	 * 构建交易订单号
-	 * 
-	 * @param coinType
-	 * @param downOrOnlineTrade
-	 *            0：线上 1：线下
-	 * @return
-	 */
-	public static String buildTradeOrderNo(Long coinType, Integer downOrOnlineTrade) {
-		String orderType = "";
-		if (coinType != null && downOrOnlineTrade != null) {
-			orderType = coinType.toString() + downOrOnlineTrade.toString();
-		}
-		if (StringUtils.isBlank(orderType)) {
-			return null;
-		}
-		return OrderNumberUtil.buildNo(orderType);
-	}
 }
