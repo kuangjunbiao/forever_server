@@ -1,17 +1,24 @@
 package com.gaoan.forever.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gaoan.forever.base.AppException;
 import com.gaoan.forever.base.BaseService;
+import com.gaoan.forever.constant.MessageInfoConstant;
+import com.gaoan.forever.entity.TbColorEntity;
+import com.gaoan.forever.entity.TbSizeEntity;
 import com.gaoan.forever.entity.TbStockEntity;
 import com.gaoan.forever.mapper.TbStockMapper;
 import com.gaoan.forever.model.query.OrderQueryConditionModel;
 import com.gaoan.forever.service.ITbStockService;
+import com.gaoan.forever.vo.SalesOrderConditionReq;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -47,6 +54,44 @@ public class TbStockServiceImpl extends BaseService<TbStockEntity> implements IT
 	public List<String> queryGoodsList(String purchaseOrderName) {
 		List<String> list = tbStockMapper.queryGoodsList(purchaseOrderName);
 		return list;
+	}
+
+	@Override
+	public List<TbColorEntity> queryGoodsColorList(SalesOrderConditionReq conditionReq) {
+		if (conditionReq == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		if (StringUtils.isBlank(conditionReq.getPurchaseOrderName())
+				|| StringUtils.isBlank(conditionReq.getGoodsName())) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		List<TbColorEntity> list = tbStockMapper.queryGoodsColorList(conditionReq);
+		return list;
+	}
+
+	@Override
+	public List<TbSizeEntity> queryGoodsSizeList(SalesOrderConditionReq conditionReq) {
+		if (conditionReq == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		if (StringUtils.isBlank(conditionReq.getPurchaseOrderName()) || StringUtils.isBlank(conditionReq.getGoodsName())
+				|| conditionReq.getColorId() == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		List<TbSizeEntity> list = tbStockMapper.queryGoodsSizeList(conditionReq);
+		return list;
+	}
+
+	@Override
+	public BigDecimal queryGoodsTagPrice(SalesOrderConditionReq conditionReq) {
+		if (conditionReq == null) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		if (StringUtils.isBlank(conditionReq.getPurchaseOrderName())
+				|| StringUtils.isBlank(conditionReq.getGoodsName())) {
+			throw new AppException(MessageInfoConstant.PARAM_CANT_BE_NULL);
+		}
+		return tbStockMapper.queryGoodsTagPrice(conditionReq);
 	}
 
 }

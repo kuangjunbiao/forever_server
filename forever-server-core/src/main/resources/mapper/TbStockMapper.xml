@@ -27,6 +27,19 @@
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
     </resultMap>
+    
+    <resultMap id="ColorResultMap" type="com.gaoan.forever.entity.TbColorEntity" >
+        <result column="id" property="id" javaType="Long"/>
+        <result column="color_name" property="colorName" javaType="String"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date"/>
+    </resultMap>
+    
+    <resultMap id="SizeResultMap" type="com.gaoan.forever.entity.TbSizeEntity" >
+        <result column="id" property="id" javaType="Long"/>
+        <result column="size_name" property="sizeName" javaType="String"/>
+        <result column="size_code" property="sizeCode" javaType="String"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date"/>
+    </resultMap>
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
@@ -193,6 +206,78 @@
 			) t
 		ORDER BY
 			t.create_time DESC
+    </select>
+    
+    <select id="queryGoodsColorList" resultMap="ColorResultMap">
+		SELECT
+			*
+		FROM
+			tb_color tc
+		WHERE
+			EXISTS (
+				SELECT
+					1
+				FROM
+					tb_stock ts
+				WHERE 1 = 1
+				<if test="purchaseOrderName != null and purchaseOrderName != ''">
+	        		AND purchase_order_name = #{purchaseOrderName}
+        		</if>
+		        <if test="goodsName != null and goodsName != ''">
+					AND goods_name = #{goodsName}
+        		</if>
+		        AND ts.color_id = tc.id
+	        )
+    </select>
+    
+    <select id="queryGoodsSizeList" resultMap="SizeResultMap">
+		SELECT
+			*
+		FROM
+			tb_size ts
+		WHERE
+			EXISTS (
+				SELECT
+					1
+				FROM
+					tb_stock tst
+				WHERE 1 = 1
+				<if test="purchaseOrderName != null and purchaseOrderName != ''">
+	        		AND tst.purchase_order_name = #{purchaseOrderName}
+        		</if>
+		        <if test="goodsName != null and goodsName != ''">
+					AND tst.goods_name = #{goodsName}
+        		</if>
+		        <if test="colorId != null">
+			        AND tst.color_id = #{colorId}
+		        </if>
+				AND tst.size_id = ts.ID
+			)
+    </select>
+    
+    <select id="queryGoodsTagPrice" resultType="BigDecimal">
+		SELECT
+			tso.tag_price
+		FROM
+			tb_sales_order tso
+		WHERE
+			EXISTS (
+				SELECT
+					1
+				FROM
+					tb_stock tst
+				WHERE 1 = 1
+				<if test="purchaseOrderName != null and purchaseOrderName != ''">
+	        		AND tst.purchase_order_name = #{purchaseOrderName}
+        		</if>
+		        <if test="goodsName != null and goodsName != ''">
+					AND tst.goods_name = #{goodsName}
+        		</if>
+				AND tst.ID = tso.goods_id
+			)
+		ORDER BY
+			tso.ID DESC
+		LIMIT 1
     </select>
     
     <!-- 添加 -->

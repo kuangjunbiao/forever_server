@@ -1,5 +1,6 @@
 package com.gaoan.forever.apiServer.controller.stock;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gaoan.forever.entity.TbColorEntity;
+import com.gaoan.forever.entity.TbSizeEntity;
 import com.gaoan.forever.entity.TbStockEntity;
 import com.gaoan.forever.model.Message;
 import com.gaoan.forever.model.query.OrderQueryConditionModel;
 import com.gaoan.forever.service.ITbStockService;
+import com.gaoan.forever.vo.SalesOrderConditionReq;
 import com.github.pagehelper.PageInfo;
 
 import io.swagger.annotations.Api;
@@ -37,7 +41,7 @@ public class StockController {
 
 	@ApiOperation(value = "获取库存列表")
 	@ApiImplicitParams(value = {
-			@ApiImplicitParam(name = "condition", value = "查询条件", paramType = "body", dataType = "json"),
+			@ApiImplicitParam(name = "condition", value = "查询条件", paramType = "body", dataType = "OrderQueryConditionModel"),
 			@ApiImplicitParam(name = "page", value = "第几页", paramType = "query", dataType = "int", required = false),
 			@ApiImplicitParam(name = "pageSize", value = "每页数据数", paramType = "query", dataType = "int", required = false) })
 	@RequestMapping(value = "/getStockList", produces = "application/json;charset=UTF-8", method = {
@@ -73,14 +77,50 @@ public class StockController {
 
 	@ApiOperation(value = "根据进货单查询商品列表")
 	@ApiImplicitParams(value = {
-			@ApiImplicitParam(name = "purchaseOrderName", value = "进货单名称", paramType = "query", dataType = "String", required = false) })
+			@ApiImplicitParam(name = "purchaseOrderName", value = "进货单名称", paramType = "query", dataType = "String", required = true) })
 	@RequestMapping(value = "/getGoodsList", produces = "application/json;charset=UTF-8", method = {
 			RequestMethod.GET })
 	@ResponseBody
-	public Object getGoodsList(HttpServletRequest request, @RequestParam(required = false) String purchaseOrderName)
+	public Object getGoodsList(HttpServletRequest request, @RequestParam(required = true) String purchaseOrderName)
 			throws Exception {
 
 		List<String> list = tbStockService.queryGoodsList(purchaseOrderName);
+
+		Message.Builder build = Message.newBuilder();
+		build.put("list", list);
+
+		return build.builldJson();
+	}
+
+	@ApiOperation(value = "根据条件查询商品颜色列表")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "conditionReq", value = "查询条件", paramType = "body", dataType = "SalesOrderConditionReq", required = true) })
+	@RequestMapping(value = "/getGoodsColorList", produces = "application/json;charset=UTF-8", method = {
+			RequestMethod.POST })
+	@ResponseBody
+	public Object getGoodsColorList(HttpServletRequest request,
+			@RequestBody(required = true) SalesOrderConditionReq conditionReq) throws Exception {
+
+		List<TbColorEntity> list = tbStockService.queryGoodsColorList(conditionReq);
+		BigDecimal tagPrice = tbStockService.queryGoodsTagPrice(conditionReq);
+
+		Message.Builder build = Message.newBuilder();
+		build.put("list", list);
+		build.put("tagPrice", tagPrice);
+
+		return build.builldJson();
+	}
+
+	@ApiOperation(value = "根据条件查询商品尺寸列表")
+	@ApiImplicitParams(value = {
+			@ApiImplicitParam(name = "conditionReq", value = "查询条件", paramType = "body", dataType = "SalesOrderConditionReq", required = true) })
+	@RequestMapping(value = "/getGoodsSizeList", produces = "application/json;charset=UTF-8", method = {
+			RequestMethod.POST })
+	@ResponseBody
+	public Object getGoodsSizeList(HttpServletRequest request,
+			@RequestBody(required = true) SalesOrderConditionReq conditionReq) throws Exception {
+
+		List<TbSizeEntity> list = tbStockService.queryGoodsSizeList(conditionReq);
 
 		Message.Builder build = Message.newBuilder();
 		build.put("list", list);
