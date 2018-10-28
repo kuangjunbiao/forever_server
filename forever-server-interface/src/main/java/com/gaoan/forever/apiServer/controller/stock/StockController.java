@@ -77,11 +77,11 @@ public class StockController {
 
 	@ApiOperation(value = "根据进货单查询商品列表")
 	@ApiImplicitParams(value = {
-			@ApiImplicitParam(name = "purchaseOrderName", value = "进货单名称", paramType = "query", dataType = "String", required = true) })
+			@ApiImplicitParam(name = "purchaseOrderName", value = "进货单名称", paramType = "query", dataType = "String", required = false) })
 	@RequestMapping(value = "/getGoodsList", produces = "application/json;charset=UTF-8", method = {
 			RequestMethod.GET })
 	@ResponseBody
-	public Object getGoodsList(HttpServletRequest request, @RequestParam(required = true) String purchaseOrderName)
+	public Object getGoodsList(HttpServletRequest request, @RequestParam(required = false) String purchaseOrderName)
 			throws Exception {
 
 		List<String> list = tbStockService.queryGoodsList(purchaseOrderName);
